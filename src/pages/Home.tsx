@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import MovingImage from '../Components/MovingImages';
 import type { Hero, ImgInfo, RivalsMap  } from '../types/types';
+import LoadingScreen from '../Components/LoadingScreen';
 
 
 const Home = () => {
@@ -54,20 +55,20 @@ const Home = () => {
     }
     
     useEffect(() => {
-      const run = async () => {
-        setLoading(true);
-        setError(null);
-    
-        const heroes = await getInfo<Hero>("https://marvelrivalsapi.com/api/v1/heroes");
-        const getMaps = await getInfo<RivalsMap>("https://marvelrivalsapi.com/api/v1/maps?page=1&limit=12", "maps")
-    
-        setHeros(heroes);
-        setMaps(getMaps)
-        setLoading(false);
-      };
-    
-      // void means you can call async function and ignore whatever it returns / prevents warnings
-      void run();
+        const run = async () => {
+            setLoading(true);
+            setError(null);
+        
+            const heroes = await getInfo<Hero>("https://marvelrivalsapi.com/api/v1/heroes");
+            const getMaps = await getInfo<RivalsMap>("https://marvelrivalsapi.com/api/v1/maps?page=1&limit=12", "maps")
+        
+            setHeros(heroes);
+            setMaps(getMaps)
+            setLoading(false);
+        };
+        
+        // void means you can call async function and ignore whatever it returns / prevents warnings
+        void run();
     }, []);
     
     const heroImages = getImages(
@@ -84,7 +85,7 @@ const Home = () => {
       (m) => m.images[2] 
     )
     
-    if (loading) return <h2>Loading…</h2>;
+    if (loading) return <LoadingScreen />;
     if (error) return <h2>{error}</h2>;
 
     return (
