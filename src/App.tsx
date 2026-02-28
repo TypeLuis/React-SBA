@@ -11,10 +11,12 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const getInfo = async <T,>(url:string)=> {
+
+  // What is <T,> -> This function works with ANY type, T is a generic placeholder type.
+  // <T[]> -> data is an array of whatever T is. If T = Hero → arr is Hero[]
+  const getInfo = async <T,>(url:string, listKey?: string)=> {
     try {
-      setLoading(true);
-      setError(null);
+
       const config = {
         method: "get",
         url: url,
@@ -24,85 +26,67 @@ function App() {
       };
       const { data } = await axios<T[]>(config);
       console.log(data)
-      return data
+
+      // If API returns an array directly
+      if (Array.isArray(data)) return data as T[];
+
+      // If API returns { maps: [...] } or { heroes: [...] } etc.
+      if (listKey && Array.isArray(data?.[listKey])) return data[listKey] as T[];
+
+      // Fallback
+      return []
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Unknown error");
       return [];
-    } finally {
-      setLoading(false);
-    }
+    } 
   }
-  
-  // const getChars = async () => {
-  //   try {
-  //     setLoading(true);
-  //     setError(null);
-  //     const config = {
-  //       method: "get",
-  //       url: "https://marvelrivalsapi.com/api/v1/heroes",
-  //       headers: {
-  //         "x-api-key": import.meta.env.VITE_MARVEL_KEY as string,
-  //       },
-  //     };
-  //     const { data } = await axios<Hero[]>(config);
-  //     console.log(data)
-  //     setHeros(data)
-  //   } catch (e: unknown) {
-  //     setError(e instanceof Error ? e.message : "Unknown error");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  
-  // const getMaps = async () => {
-  //   try {
-  //     const config = {
-  //       method: 'get',
-  //       url: 'https://marvelrivalsapi.com/api/v1/maps',
-  //       headers: { 
-  //         'x-api-key': import.meta.env.VITE_MARVEL_KEY as string
-  //       }
-  //     };
-  //     const { data } = await axios(config);
-  //     console.log(data)
-  //   } catch (e: unknown) {
-  //     setError(e instanceof Error ? e.message : "Unknown error");
-  //   }
-  // }
 
+  // getId: (item: T) => string | number -> This is a function parameter. We need it because Because Hero and RivalsMap don’t have the same structure. Example, RivalsMap return a integer ID, Hero returns string ID
   const getImages = <T,>(
     arr: T[],
     getId: (item: T) => string | number,
     getName: (item: T) => string,
     getImage: (item: T) => string
   ): ImgInfo[] => {
+    if (!Array.isArray(arr)) return []
     return arr.map((item) => ({
       id: String(getId(item)),
       name: getName(item),
       image: getImage(item),
     }));
   }
-  
-  const heroImages = () => {
-    const data: ImgInfo[] = heros.map((h) => ({
-      id: h.id,
-      name: h.name,
-      image: h.imageUrl,
-    }));
-    return data
-  }
 
   useEffect(() => {
     const run = async () => {
+      setLoading(true);
+      setError(null);
+
       const heroes = await getInfo<Hero>("https://marvelrivalsapi.com/api/v1/heroes");
-      const getMaps = await getInfo<RivalsMap>("https://marvelrivalsapi.com/api/v1/maps")
+      const getMaps = await getInfo<RivalsMap>("https://marvelrivalsapi.com/api/v1/maps?page=1&limit=12", "maps")
+
       setHeros(heroes);
       setMaps(getMaps)
+      setLoading(false);
     };
 
     // void means you can call async function and ignore whatever it returns / prevents warnings
     void run();
   }, []);
+
+  const heroImages = getImages(
+    heros,
+    (h) => h.id,
+    (h)=> h.name,
+    (h) => h.imageUrl
+  )
+
+  const mapImages = getImages(
+    maps,
+    (m) => m.id,
+    (m) => m.name,
+    (m) => m.images[2] 
+  )
+  console.log(mapImages)
 
   if (loading) return <h2>Loading…</h2>;
   if (error) return <h2>{error}</h2>;
@@ -110,7 +94,8 @@ function App() {
   return (
     <>
       <div style={{ fontSize: "500px" }}>hi</div>
-      <MovingImage imgs={heroImages()} />
+      <MovingImage imgs={heroImages} />
+      <MovingImage imgs={mapImages} />
       <div></div>
     </>
   );
