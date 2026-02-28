@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Outfit:wght@300;400&display=swap');
+
+// Variables
+$glass-bg: rgba(255, 255, 255, 0.06);
+$glass-border: rgba(255, 255, 255, 0.12);
+$glass-blur: blur(18px);
+$accent: #e8c97a;
+$text: rgba(255, 255, 255, 0.85);
+$text-dim: rgba(255, 255, 255, 0.45);
+$transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 0 1.5rem;
+  font-family: 'Outfit', sans-serif;
+
+  // Glass layer
+  background: $glass-bg;
+  border-bottom: 1px solid transparent;
+  backdrop-filter: $glass-blur;
+  -webkit-backdrop-filter: $glass-blur;
+  transition: background $transition, border-color $transition, box-shadow $transition;
+
+  &--scrolled {
+    background: rgba(0, 0, 0, 0.45);
+    border-bottom-color: $glass-border;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  // Brand
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    color: $accent;
+    text-decoration: none;
+    transition: opacity $transition;
+
+    &:hover { opacity: 0.8; }
+  }
+
+  &__brand-icon {
+    font-size: 1.3rem;
+    filter: drop-shadow(0 0 6px $accent);
+  }
+
+  // Desktop links
+  &__links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    @media (max-width: 768px) { display: none; }
+  }
+
+  &__link {
+    color: $text-dim;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    position: relative;
+    transition: color $transition;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: $accent;
+      transition: width $transition;
+    }
+
+    &:hover {
+      color: $text;
+      &::after { width: 100%; }
+    }
+
+    &--active {
+      color: $accent;
+      &::after { width: 100%; background: $accent; }
+    }
+  }
+
+  // Hamburger button
+  &__hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+
+    @media (max-width: 768px) { display: flex; }
+
+    span {
+      display: block;
+      height: 1.5px;
+      background: $text;
+      border-radius: 2px;
+      transform-origin: center;
+      transition: transform $transition, opacity $transition, width $transition;
+
+      &:nth-child(1) { width: 100%; }
+      &:nth-child(2) { width: 70%; }
+      &:nth-child(3) { width: 100%; }
+    }
+
+    &--open span {
+      &:nth-child(1) { transform: translateY(6.5px) rotate(45deg); width: 100%; }
+      &:nth-child(2) { opacity: 0; transform: scaleX(0); }
+      &:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    }
+  }
+
+  // Mobile drawer
+  &__drawer {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    @media (min-width: 769px) { display: none; }
+
+    &--open { max-height: 300px; }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0.75rem 0 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      max-width: 1200px;
+      margin-inline: auto;
+    }
+
+    .navbar__link {
+      display: block;
+      padding: 0.6rem 0.25rem;
+      font-size: 0.95rem;
+      border-bottom: 1px solid $glass-border;
+
+      &::after { display: none; }
+    }
+  }
+}
