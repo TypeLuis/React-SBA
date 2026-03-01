@@ -1,0 +1,328 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap');
+
+$blood:     #8b1a1a;
+$ember:     #c0392b;
+$gold:      #c9a84c;
+$gold-dim:  rgba(201, 168, 76, 0.4);
+$text:      rgba(230, 215, 190, 0.92);
+$text-dim:  rgba(230, 215, 190, 0.45);
+$dark:      #0a0608;
+$transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+.map-detail {
+  position: relative;
+  min-height: 100vh;
+  background: $dark;
+  color: $text;
+  font-family: 'Crimson Pro', serif;
+
+  // ── Full-width escape hatch ──────────────────────────────
+  // Breaks out of any parent max-width container
+  width: 100vw;
+  margin-left: 50%;
+  transform: translateX(-50%);
+
+  // Blurred bg image
+  &__bg {
+    position: fixed;
+    inset: -40px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(28px) brightness(0.18) saturate(0.6);
+    z-index: 0;
+    transform: scale(1.1);
+  }
+
+  &__bg-overlay {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(139, 26, 26, 0.18) 0%, transparent 65%),
+      linear-gradient(to bottom, rgba(10,6,8,0.3) 0%, rgba(10,6,8,0.85) 60%, #0a0608 100%);
+    z-index: 0;
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 6rem 2rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  // ── Header ──────────────────────────────
+  &__header {
+    text-align: center;
+  }
+
+  &__location {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: $gold;
+    opacity: 0.8;
+    margin-bottom: 1rem;
+  }
+
+  &__rune {
+    font-size: 0.9rem;
+    filter: drop-shadow(0 0 6px $gold);
+  }
+
+  &__title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.4rem;
+    color: #fff;
+    text-shadow:
+      0 0 40px rgba(139, 26, 26, 0.6),
+      0 2px 4px rgba(0,0,0,0.8);
+    line-height: 1.1;
+  }
+
+  &__subtitle {
+    font-size: 1rem;
+    font-style: italic;
+    color: $text-dim;
+    margin: 0 0 1.5rem;
+    letter-spacing: 0.03em;
+  }
+
+  &__badges {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  &__badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.35rem 1rem;
+    border: 1px solid $gold-dim;
+    color: $gold;
+    background: rgba(201, 168, 76, 0.06);
+
+    &--competitive {
+      border-color: rgba(192, 57, 43, 0.5);
+      color: $ember;
+      background: rgba(192, 57, 43, 0.08);
+    }
+  }
+
+  // ── Gallery ──────────────────────────────
+  &__gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__main-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: 1px solid rgba(201, 168, 76, 0.15);
+    box-shadow: 0 8px 48px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.03);
+
+    img, iframe {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border: none;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.6) 100%);
+      pointer-events: none;
+    }
+  }
+
+  &__play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid rgba(201, 168, 76, 0.6);
+    background: rgba(10, 6, 8, 0.7);
+    backdrop-filter: blur(8px);
+    color: $gold;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform $transition, border-color $transition, box-shadow $transition;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span { margin-left: 3px; }
+
+    &:hover {
+      transform: translate(-50%, -50%) scale(1.1);
+      border-color: $gold;
+      box-shadow: 0 0 24px rgba(201, 168, 76, 0.3);
+    }
+
+    &--close {
+      top: 1rem;
+      left: auto;
+      right: 1rem;
+      transform: none;
+      width: 36px;
+      height: 36px;
+      font-size: 0.8rem;
+      border-color: rgba(255,255,255,0.2);
+      color: $text;
+
+      &:hover {
+        transform: none;
+        border-color: $ember;
+        color: $ember;
+        box-shadow: none;
+      }
+    }
+  }
+
+  &__thumbs {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    scrollbar-width: thin;
+    scrollbar-color: $gold-dim transparent;
+  }
+
+  &__thumb {
+    flex-shrink: 0;
+    width: 90px;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: 1px solid rgba(201, 168, 76, 0.15);
+    background: rgba(255,255,255,0.03);
+    cursor: pointer;
+    transition: border-color $transition, opacity $transition;
+    opacity: 0.55;
+    padding: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    &--active {
+      border-color: $gold;
+      opacity: 1;
+    }
+
+    &:hover:not(&--active) {
+      opacity: 0.8;
+      border-color: $gold-dim;
+    }
+
+    &--video {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $gold;
+      font-size: 1.2rem;
+      background: rgba(139, 26, 26, 0.15);
+      border-color: rgba(139, 26, 26, 0.3);
+
+      &:hover { opacity: 0.9; border-color: $ember; }
+    }
+  }
+
+  // ── Info ──────────────────────────────
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  &__divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: $gold;
+
+    span {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      flex-shrink: 0;
+    }
+
+    &::before, &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, $gold-dim);
+    }
+    &::after {
+      background: linear-gradient(to left, transparent, $gold-dim);
+    }
+  }
+
+  &__description {
+    font-size: 1.15rem;
+    line-height: 1.85;
+    color: $text;
+    font-weight: 300;
+    font-style: italic;
+    margin: 0;
+    text-align: center;
+    max-width: 680px;
+    margin-inline: auto;
+  }
+
+  &__submap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid $gold-dim;
+    background: rgba(201, 168, 76, 0.04);
+    width: fit-content;
+    margin-inline: auto;
+  }
+
+  &__submap-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: $text-dim;
+  }
+
+  &__submap-name {
+    font-size: 0.95rem;
+    color: $gold;
+  }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

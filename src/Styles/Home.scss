@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Outfit:wght@300;400&display=swap');
+
+$accent:       #e8c97a;
+$accent-dim:   rgba(232, 201, 122, 0.15);
+$glass-bg:     rgba(0, 0, 0, 0.55);
+$glass-border: rgba(255, 255, 255, 0.12);
+$glass-blur:   blur(20px);
+$text:         rgba(255, 255, 255, 0.92);
+$text-dim:     rgba(255, 255, 255, 0.45);
+$transition:   0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+.home-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 3rem 2.5rem;
+  background: $glass-bg;
+  border: 1px solid $glass-border;
+  backdrop-filter: $glass-blur;
+  -webkit-backdrop-filter: $glass-blur;
+  text-align: center;
+  max-width: 520px;
+  width: 90%;
+  animation: fade-up 0.6s ease both;
+
+  &__eyebrow {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: $accent;
+    margin: 0;
+    opacity: 0.8;
+  }
+
+  &__title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2rem, 6vw, 3.25rem);
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    margin: 0;
+    line-height: 1.1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1em;
+    color: #fff;
+    text-shadow: 0 2px 24px rgba(0,0,0,0.6);
+  }
+
+  &__title-accent {
+    color: $accent;
+    text-shadow:
+      0 0 30px rgba(232, 201, 122, 0.5),
+      0 2px 24px rgba(0,0,0,0.6);
+  }
+
+  &__tagline {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.65;
+    color: $text-dim;
+    margin: 0;
+    max-width: 380px;
+    letter-spacing: 0.02em;
+  }
+
+  &__nav {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+
+  &__btn {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.65rem 1.5rem;
+    border: 1px solid $glass-border;
+    color: $text-dim;
+    background: rgba(255, 255, 255, 0.05);
+    transition: color $transition, border-color $transition, background $transition, box-shadow $transition;
+
+    &:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,0.3);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    &--primary {
+      color: $accent;
+      border-color: rgba(232, 201, 122, 0.4);
+      background: $accent-dim;
+
+      &:hover {
+        background: rgba(232, 201, 122, 0.25);
+        border-color: rgba(232, 201, 122, 0.7);
+        box-shadow: 0 0 20px rgba(232, 201, 122, 0.15);
+        color: $accent;
+      }
+    }
+  }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Outfit:wght@300;400;500&display=swap');
+
+$glass-bg:     rgba(0, 0, 0, 0.55);
+$glass-border: rgba(255, 255, 255, 0.12);
+$glass-blur:   blur(20px);
+$accent:       #e8c97a;
+$accent-dim:   rgba(232, 201, 122, 0.15);
+$text:         rgba(255, 255, 255, 0.9);
+$text-dim:     rgba(255, 255, 255, 0.45);
+$transition:   0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+.select {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2.5rem 2rem;
+  background: $glass-bg;
+  border: 1px solid $glass-border;
+  backdrop-filter: $glass-blur;
+  -webkit-backdrop-filter: $glass-blur;
+  border-radius: 4px;
+  min-width: 320px;
+  max-width: 420px;
+  width: 100%;
+  animation: fade-up 0.5s ease both;
+
+  &__title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $accent;
+    margin: 0;
+    text-align: center;
+    text-shadow: 0 0 20px rgba(232, 201, 122, 0.3);
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  &__select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid $glass-border;
+    border-radius: 3px;
+    color: $text;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23e8c97a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+    transition: border-color $transition, background $transition;
+
+    &:focus {
+      outline: none;
+      border-color: rgba(232, 201, 122, 0.5);
+      background-color: rgba(255, 255, 255, 0.09);
+    }
+
+    option {
+      background: #1a1a1a;
+      color: $text;
+    }
+  }
+
+  &__submit {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: $accent-dim;
+    border: 1px solid rgba(232, 201, 122, 0.4);
+    border-radius: 3px;
+    color: $accent;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background $transition, border-color $transition, box-shadow $transition;
+
+    &:hover:not(:disabled) {
+      background: rgba(232, 201, 122, 0.25);
+      border-color: rgba(232, 201, 122, 0.7);
+      box-shadow: 0 0 16px rgba(232, 201, 122, 0.15);
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

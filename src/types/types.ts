@@ -74,8 +74,8 @@ export type HeroAbility = {
 };
 
 export type HeroObj = {
-    id: string;          // "1015"
-    name: string;        // "storm"
+    id: string;         
+    name: string;       
     real_name: string;
     imageUrl: string;
 
@@ -83,7 +83,7 @@ export type HeroObj = {
     attack_type: string;
     team: string[];
 
-    difficulty: string;  // "3" (string in API)
+    difficulty: string;  
     bio: string;
     lore: string;
 
@@ -91,3 +91,97 @@ export type HeroObj = {
     costumes: HeroCostume[];
     abilities: HeroAbility[];
 };
+
+
+
+export type PlayerStats = {
+    hero_id: number;
+    hero_name: string;
+    hero_thumbnail: string;
+  
+    matches: number;
+    wins: number;
+    mvp: number;
+    svp: number;
+  
+    kills: number;
+    deaths: number;
+    assists: number;
+  
+    play_time: number;      // seconds (float)
+    damage: number;         // total damage dealt
+    heal: number;           // total healing done
+    damage_taken: number;   // total damage received
+  
+    main_attack: {
+        total: number;
+        hits: number;
+    };
+  };
+
+export type PlayerData = {
+    uid: number;
+    name: string;
+    isPrivate: boolean;
+    player: {
+      uid: number;
+      level: string;
+      name: string;
+      icon: {
+        player_icon_id: string;
+        player_icon: string;
+      };
+      rank: {
+        rank: string;
+        image: string;
+        color: string;
+      };
+      team: {
+        club_team_id: string;
+        club_team_mini_name: string;
+        club_team_type: string;
+      } | null;
+      info: {
+        completed_achievements: string;
+        login_os: string;
+      };
+    };
+    overall_stats: {
+      total_matches: number;
+      total_wins: number;
+      ranked: {
+        total_matches: number;
+        total_wins: number;
+        total_assists: number;
+        total_deaths: number;
+        total_kills: number;
+        total_time_played: string;
+        total_time_played_raw: number;
+        total_mvp: number;
+        total_svp: number;
+      };
+      unranked: {
+        total_matches: number;
+        total_wins: number;
+        total_assists: number;
+        total_deaths: number;
+        total_kills: number;
+        total_time_played: string;
+        total_time_played_raw: number;
+        total_mvp: number;
+        total_svp: number;
+      };
+    };
+    team_mates: {
+      player_info: {
+        nick_name: string;
+        player_icon: string;
+        player_uid: number;
+      };
+      matches: number;
+      wins: number;
+      win_rate: string;
+    }[];
+    heroes_ranked: PlayerStats[],
+    heroes_unranked: PlayerStats[]
+  };

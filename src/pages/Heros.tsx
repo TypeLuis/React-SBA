@@ -3,6 +3,7 @@ import { getImages } from '../utilities/functions';
 import type { Hero } from '../types/types';
 import MovingImage from '../Components/MovingImages';
 import { useNavigate } from 'react-router-dom';
+import '../Styles/InfoSearch.scss';
 
 type HeroProps = {
     heros: Hero[],
@@ -27,8 +28,9 @@ const Heros = ({ heros }: HeroProps) => {
 
     const HeroForm = () => {
         return (
-            <form onSubmit={handleSubmit}>
+            <form className="select__form" onSubmit={handleSubmit}>
             <select
+            className="select__select"
                 value={selected}
                 onChange={(e) => setSelected(e.target.value)}
                 required
@@ -40,15 +42,15 @@ const Heros = ({ heros }: HeroProps) => {
                     )
                 })}
             </select>
-            <input type="submit" value="Submit" disabled={!selected}/>
+            <input className="select__submit" type="submit" value="Enter Character" disabled={!selected}/>
         </form>
         )
     }
 
     return (
         <MovingImage imgs={heroImages}>
-            <div>
-                <h1>Find Your Hero</h1>
+            <div className='select'>
+                <h1 className="select__title">Find Your Hero</h1>
                 <HeroForm />
             </div>
         </MovingImage>

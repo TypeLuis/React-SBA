@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { getOne } from '../utilities/functions';
 import LoadingScreen from '../Components/LoadingScreen';
 import MapDetail from '../Components/MapDetail';
 import HeroDetail from '../Components/HeroDetail';
 import PlayerDetail from '../Components/PlayerDetail';
-import type {  HeroObj, RivalsMap } from '../types/types';
-
-type MapDetailsProps = {
-
-}
-
-type Data = HeroObj | RivalsMap
+import type {  HeroObj, PlayerData, RivalsMap } from '../types/types';
 
 
-const MapDetails = ({ }: MapDetailsProps) => {
+type Data = HeroObj | RivalsMap | PlayerData
+
+const DetailsPage = ({ }) => {
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(true);
     const [info, setInfo] = useState<Data | null>(null)
@@ -51,6 +47,7 @@ const MapDetails = ({ }: MapDetailsProps) => {
         const run = async () => {
             setLoading(true)
             const data = await getOne<Data>(`https://marvelrivalsapi.com${endpoint}`, setError)
+            console.log(data)
             setInfo(data)
             setLoading(false)
         }
@@ -63,11 +60,11 @@ const MapDetails = ({ }: MapDetailsProps) => {
     if (error) return <h2>{error}</h2>;
     return (
         <>
-            {isMap && <MapDetail rivalsMap={info as RivalsMap}/>}
+            {isMap && <MapDetail map={info as RivalsMap}/>}
             {isHero && <HeroDetail hero={info as HeroObj} />}
-            {isPlayer && <PlayerDetail />}
+            {isPlayer && <PlayerDetail player={info as PlayerData} />}
         </>
     );
 };
 
-export default MapDetails;
+export default DetailsPage;

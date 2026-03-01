@@ -9,8 +9,7 @@ import Heros from './pages/Heros';
 import Maps from './pages/Maps';
 import Players from './pages/Players';
 import './App.scss'
-import MapDetails from './pages/MapDetails';
-import HeroDetails from './pages/HeroDetails';
+import DetailsPage from './pages/DetailsPage';
 import { getInfo } from './utilities/functions';
 
 function App() {
@@ -49,8 +48,9 @@ function App() {
           <Route path="/heroes" element={<Heros heros={heros}/>}/>
           <Route path="/maps" element={<Maps rivalMaps={maps} />}/>
           <Route path="/players" element={<Players/>}/>
-          <Route path="/heroes/:id" element={<MapDetails />} />
-          <Route path="/maps/:id" element={<MapDetails />} />
+          <Route path="/heroes/:id" element={<DetailsPage />} />
+          <Route path="/maps/:id" element={<DetailsPage />} />
+          <Route path="/players/:id" element={<DetailsPage />} />
         </Routes>
       </div>
     </>
