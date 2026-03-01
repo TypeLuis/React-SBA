@@ -8,6 +8,10 @@ import LoadingScreen from './Components/LoadingScreen';
 import Heros from './pages/Heros';
 import Maps from './pages/Maps';
 import Players from './pages/Players';
+import './App.scss'
+import MapDetails from './pages/MapDetails';
+import HeroDetails from './pages/HeroDetails';
+import { getInfo } from './utilities/functions';
 
 function App() {
   const [heros, setHeros] = useState<Hero[]>([]);
@@ -16,41 +20,13 @@ function App() {
   const [error, setError] = useState<string | null>(null);
 
 
-  // What is <T,> -> This function works with ANY type, T is a generic placeholder type.
-  // <T[]> -> data is an array of whatever T is. If T = Hero → arr is Hero[]
-  const getInfo = async <T,>(url: string, listKey?: string) => {
-    try {
-
-      const config = {
-        method: "get",
-        url: url,
-        headers: {
-          "x-api-key": import.meta.env.VITE_MARVEL_KEY as string,
-        },
-      };
-      const { data } = await axios<T[]>(config);
-
-      // If API returns an array directly
-      if (Array.isArray(data)) return data as T[];
-
-      // If API returns { maps: [...] } or { heroes: [...] } etc.
-      if (listKey && Array.isArray(data?.[listKey])) return data[listKey] as T[];
-
-      // Fallback
-      return []
-    } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Unknown error");
-      return [];
-    }
-  }
-
   useEffect(() => {
     const run = async () => {
       setLoading(true);
       setError(null);
 
-      const heroes = await getInfo<Hero>("https://marvelrivalsapi.com/api/v1/heroes");
-      const getMaps = await getInfo<RivalsMap>("https://marvelrivalsapi.com/api/v1/maps?page=1&limit=12", "maps")
+      const heroes = await getInfo<Hero>("https://marvelrivalsapi.com/api/v1/heroes", setError);
+      const getMaps = await getInfo<RivalsMap>("https://marvelrivalsapi.com/api/v1/maps?page=1&limit=50", setError, "maps")
 
       setHeros(heroes);
       setMaps(getMaps)
@@ -67,12 +43,16 @@ function App() {
   return (
     <>
       <Nav />
-      <Routes>
-        <Route path="/" element={<Home heros={heros} rivalMaps={maps} />} />
-        <Route path="/heroes" element={<Heros heros={heros}/>}/>
-        <Route path="/maps" element={<Maps rivalMaps={maps} />}/>
-        <Route path="/players" element={<Players/>}/>
-      </Routes>
+      <div className='layout'>
+        <Routes>
+          <Route path="/" element={<Home heros={heros} rivalMaps={maps} />} />
+          <Route path="/heroes" element={<Heros heros={heros}/>}/>
+          <Route path="/maps" element={<Maps rivalMaps={maps} />}/>
+          <Route path="/players" element={<Players/>}/>
+          <Route path="/heroes/:id" element={<MapDetails />} />
+          <Route path="/maps/:id" element={<MapDetails />} />
+        </Routes>
+      </div>
     </>
   );
 }

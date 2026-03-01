@@ -19,7 +19,7 @@ const Home = ({heros, rivalMaps}: HomeProps) => {
     const mapImages = getImages(
       rivalMaps,
       (m) => m.id,
-      (m) => m.name,
+      (m) => `${m.name} - ${m.id}`,
       (m) => m.images[2] 
     )
 

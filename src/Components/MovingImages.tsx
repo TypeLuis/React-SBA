@@ -72,11 +72,11 @@ function MovingImage({ imgs, numCols = 4, children }: MovingImageProps) {
             className="inner"
             ref={(el) => { colRefs.current[colIndex] = el; }}
           >
-            {col.map((hero, i) => (
+            {col.map((img, i) => (
               <img
-                key={`${hero.id}-${i}`}
-                src={toImageUrl(hero.image)}
-                alt={hero.name}
+                key={`${img.id}-${i}`}
+                src={toImageUrl(img.image)}
+                alt={img.name}
               />
             ))}
           </div>

@@ -1,4 +1,6 @@
+import type React from "react";
 import type { ImgInfo } from "../types/types";
+import axios from 'axios';
 
 // This function get's the id, name, and imageURL of a api endpoint regardless if the key:value pair is different
 // getId: (item: T) => string | number -> This is a function parameter. We need it because Because Hero and RivalsMap don’t have the same structure. Example, RivalsMap return a integer ID, Hero returns string ID
@@ -17,39 +19,88 @@ export const getImages = <T,>(
 }
 
 
+type SetError = React.Dispatch<React.SetStateAction<string | null>>;
+// What is <T,> -> This function works with ANY type, T is a generic placeholder type.
+// <T[]> -> data is an array of whatever T is. If T = Hero → arr is Hero[]
+export const getInfo = async <T,>(url: string, setError: SetError, listKey?: string) => {
+    try {
+
+        const config = {
+            method: "get",
+            url: url,
+            headers: {
+                "x-api-key": import.meta.env.VITE_MARVEL_KEY as string,
+            },
+        };
+        const { data } = await axios<T[]>(config);
+        console.log(data)
+
+        // If API returns an array directly
+        if (Array.isArray(data)) return data as T[];
+
+        // If API returns { maps: [...] } or { heroes: [...] } etc.
+        if (listKey && Array.isArray(data?.[listKey])) return data[listKey] as T[];
+
+        // Fallback
+        return []
+    } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "Unknown error");
+        return [];
+    }
+}
+
+
+export const getOne = async <T,>(
+    url: string,
+    setError?: SetError
+  ) => {
+    try {
+      const { data } = await axios.get<T>(url, {
+        headers: {
+          "x-api-key": import.meta.env.VITE_MARVEL_KEY as string,
+        },
+      });
+      return data;
+    } catch (e: unknown) {
+      setError?.(e instanceof Error ? e.message : "Unknown error");
+      return null;
+    }
+  };
+
+
 
 const ORIGIN = "https://marvelrivalsapi.com";
 const BASE_IMAGES = `${ORIGIN}/rivals`;
 
 export function toImageUrl(path?: string): string {
-  if (!path) return "";
-  if (path.startsWith("http://") || path.startsWith("https://")) return path;
-  if (path.startsWith("/rivals/")) return `${ORIGIN}${path}`;
-  return `${BASE_IMAGES}${path.startsWith("/") ? "" : "/"}${path}`;
+    if (!path) return "";
+    if (path.startsWith("http://") || path.startsWith("https://")) return path;
+    if (path.startsWith("/rivals/")) return `${ORIGIN}${path}`;
+    return `${BASE_IMAGES}${path.startsWith("/") ? "" : "/"}${path}`;
 }
 
 // Splits an array into groups of a specified size.
 // Example: chunk([1,2,3,4,5,6], 3) => [[1,2,3],[4,5,6]]
 export const chunk = <T,>(arr: T[], size: number): T[][] => {
-  const out: T[][] = [];
-  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
-  return out;
+    const out: T[][] = [];
+    for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+    return out;
 };
 
 // Repeat array until it reaches at least `minLength`
 export const padToLength = <T,>(arr: T[], minLength: number): T[] => {
-  if (arr.length === 0) return [];
-  const out: T[] = [];
-  while (out.length < minLength) out.push(...arr);
-  return out;
+    if (arr.length === 0) return [];
+    const out: T[] = [];
+    while (out.length < minLength) out.push(...arr);
+    return out;
 };
 
 // Returns a new randomly shuffled copy of the array without mutating the original.
 export const shuffleArray = <T,>(array: T[]): T[] => {
-  const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
 };
