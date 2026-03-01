@@ -1,49 +1,16 @@
 import { useEffect, useState, useRef } from 'react'
 import '../Styles/MovingImages.scss'
 import type { ImgInfo } from '../types/types';
+import { chunk, padToLength, shuffleArray, toImageUrl } from '../utilities/functions';
 
 type MovingImageProps = {
   imgs: ImgInfo[];
   numCols?: number; // default 4
+  children?: React.ReactNode;
 };
 
-const ORIGIN = "https://marvelrivalsapi.com";
-const BASE_IMAGES = `${ORIGIN}/rivals`;
 
-export function toImageUrl(path?: string): string {
-  if (!path) return "";
-  if (path.startsWith("http://") || path.startsWith("https://")) return path;
-  if (path.startsWith("/rivals/")) return `${ORIGIN}${path}`;
-  return `${BASE_IMAGES}${path.startsWith("/") ? "" : "/"}${path}`;
-}
-
-// Splits an array into groups of a specified size.
-// Example: chunk([1,2,3,4,5,6], 3) => [[1,2,3],[4,5,6]]
-const chunk = <T,>(arr: T[], size: number): T[][] => {
-  const out: T[][] = [];
-  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
-  return out;
-};
-
-// Repeat array until it reaches at least `minLength`
-const padToLength = <T,>(arr: T[], minLength: number): T[] => {
-  if (arr.length === 0) return [];
-  const out: T[] = [];
-  while (out.length < minLength) out.push(...arr);
-  return out;
-};
-
-// Returns a new randomly shuffled copy of the array without mutating the original.
-const shuffleArray = <T,>(array: T[]): T[] => {
-  const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-};
-
-function MovingImage({ imgs, numCols = 4 }: MovingImageProps) {
+function MovingImage({ imgs, numCols = 4, children }: MovingImageProps) {
   const [columns, setColumns] = useState<ImgInfo[][]>([]);
   const colRefs = useRef<Array<HTMLDivElement | null>>([]);
 
@@ -115,6 +82,12 @@ function MovingImage({ imgs, numCols = 4 }: MovingImageProps) {
           </div>
         </div>
       ))}
+
+      {children && (
+        <div className="moving-image__overlay">
+          {children}
+        </div>
+      )}
     </main>
   );
 }

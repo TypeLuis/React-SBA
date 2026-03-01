@@ -1,3 +1,4 @@
+// everything the Heros api endpoint brings
 export type Hero = {
     id: string;
     name: string;
@@ -14,6 +15,7 @@ export type Hero = {
     transformations: unknown[];
 };
   
+// image type needed
 export type ImgInfo = {
 id: string;
 name: string;
