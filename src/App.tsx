@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import Home from './pages/Home';
 import Nav from './Components/Nav';
-import axios from 'axios';
 import { Route, Routes } from "react-router-dom";
 import type { Hero, RivalsMap } from './types/types';
 import LoadingScreen from './Components/LoadingScreen';
