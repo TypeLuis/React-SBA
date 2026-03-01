@@ -1,3 +1,5 @@
+[Deployed Site](https://marvel-rivals-api.netlify.app/)
+
 # Marvel Rivals Explorer
 
 A React + TypeScript web app that lets you browse **heroes**, **maps**, and **player stats** from the Marvel Rivals game — powered by the [Marvel Rivals API](https://marvelrivalsapi.com).
