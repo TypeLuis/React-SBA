@@ -71,7 +71,7 @@ function HeroDetail({ hero }: HeroDetailProps) {
           <div className="hero-detail__portrait-wrap">
             <img
               className="hero-detail__portrait"
-              src={toImageUrl(hero.imageUrl)}
+              src={toImageUrl(hero.costumes[activeCostume].icon)}
               alt={hero.name}
             />
             <div className="hero-detail__portrait-corner hero-detail__portrait-corner--tl" />
