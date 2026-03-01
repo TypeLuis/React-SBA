@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { RivalsMap } from '../types/types';
 import { toImageUrl } from '../utilities/functions';
 import '../Styles/MapDetail.scss';

@@ -1,12 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Styles/Players.scss';
-import axios from 'axios';
-
-type Player = {
-    name: string,
-    uid: string
-}
 
 const Players = () => {
     const [username, setUsername] = React.useState('')
